@@ -33,6 +33,7 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
         loadList();
         tabelaSelectedIndexChange();
     }
+    
     private void tabelaSelectedIndexChange() {
         final ListSelectionModel rowSM = table1.getSelectionModel();
         rowSM.addListSelectionListener(new ListSelectionListener() {
@@ -92,10 +93,6 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
         table = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         table1 = new javax.swing.JTable();
-
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -281,9 +278,6 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -296,9 +290,12 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
                             .addComponent(emertimiTxt)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(emertimiLbl)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 97, Short.MAX_VALUE))))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 131, Short.MAX_VALUE)
@@ -318,7 +315,7 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
                     .addComponent(emertimiTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(idTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                 .addGap(28, 28, 28))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -415,6 +412,7 @@ public class NrKatitForm extends javax.swing.JInternalFrame {
         idTxt.setText("");
         emertimiTxt.setText("");
     }
+      
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBtn;

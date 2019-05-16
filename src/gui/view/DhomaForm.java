@@ -49,6 +49,7 @@ public class DhomaForm extends javax.swing.JInternalFrame {
         tabelaSelectedIndexChange();
         loadLlojiDhomesComboBox();
         loadKatiComboBox();
+        
     }
     //KAtii njejt
     private List<Kati> kati;
@@ -159,10 +160,9 @@ public class DhomaForm extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(table1);
 
-        setClosable(true);
-        setIconifiable(true);
+        setBackground(new java.awt.Color(204, 204, 204));
 
-        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
         saveBtn.setText("Ruaj");
         saveBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -232,6 +232,8 @@ public class DhomaForm extends javax.swing.JInternalFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+
         emertimiLbl.setText("Numri Dhomes");
 
         emertimiTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -240,6 +242,7 @@ public class DhomaForm extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setBackground(new java.awt.Color(153, 255, 255));
         jLabel1.setText("Numri i Shtreterve");
 
         NrShtretrve.addActionListener(new java.awt.event.ActionListener() {
@@ -320,7 +323,7 @@ public class DhomaForm extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(238, 238, 238)
                         .addComponent(Refresh)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -331,7 +334,7 @@ public class DhomaForm extends javax.swing.JInternalFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(Refresh)
                 .addGap(27, 27, 27))
         );
@@ -409,6 +412,7 @@ public class DhomaForm extends javax.swing.JInternalFrame {
     private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
         // TODO add your handling code here:
         loadList();
+        repaint();
     }//GEN-LAST:event_RefreshActionPerformed
 
     public void clear() {
@@ -419,7 +423,6 @@ public class DhomaForm extends javax.swing.JInternalFrame {
         LlojiDhomesComboBox.repaint();
         KatiComboBox.setSelectedItem(null);
         KatiComboBox.repaint();
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

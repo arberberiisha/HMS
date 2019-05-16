@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "LlojiDhomes.findById", query = "SELECT l FROM LlojiDhomes l WHERE l.id = :id"),
     @NamedQuery(name = "LlojiDhomes.findByEmertimi", query = "SELECT l FROM LlojiDhomes l WHERE l.emertimi = :emertimi")})
 public class LlojiDhomes implements Serializable {
+    @OneToMany(mappedBy = "dhomaID")
+    private Collection<Rezervimi> rezervimiCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -101,6 +103,15 @@ public class LlojiDhomes implements Serializable {
     @Override
     public String toString() {
         return emertimi;
+    }
+
+    @XmlTransient
+    public Collection<Rezervimi> getRezervimiCollection() {
+        return rezervimiCollection;
+    }
+
+    public void setRezervimiCollection(Collection<Rezervimi> rezervimiCollection) {
+        this.rezervimiCollection = rezervimiCollection;
     }
 
 }
