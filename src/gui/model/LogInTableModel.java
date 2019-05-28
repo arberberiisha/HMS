@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class LogInTableModel extends AbstractTableModel {
     List<LogIn> list;
-    String[] cols = {"ID", "Emertimi"};
+    String[] cols = {"ID", "Emertimi","Roli"};
 
     public LogInTableModel(List<LogIn> list) {
         this.list = list;
@@ -58,6 +58,8 @@ public class LogInTableModel extends AbstractTableModel {
             case 1:
                 return d.getUserName();
             case 2:
+                return d.getIDRoli();
+            case 3: 
                 return d.getPassword();
             default:
                 return null;

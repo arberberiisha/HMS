@@ -5,9 +5,7 @@
  */
 package BLL;
 
-import static BLL.LlojiDhomes_.rezervimiCollection;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,7 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,7 +35,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rezervimi.findByNgaData", query = "SELECT r FROM Rezervimi r WHERE r.ngaData = :ngaData"),
     @NamedQuery(name = "Rezervimi.findByDeri", query = "SELECT r FROM Rezervimi r WHERE r.deri = :deri")})
 public class Rezervimi implements Serializable {
-    private Collection<Rezervimi> rezervimiCollection;
+    @Basic(optional = false)
+    @Column(name = "Deri")
+    @Temporal(TemporalType.DATE)
+    private Date deri;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -54,12 +54,9 @@ public class Rezervimi implements Serializable {
     @Column(name = "NgaData")
     @Temporal(TemporalType.DATE)
     private Date ngaData;
-    @Basic(optional = false)
-    @Column(name = "Deri")
-    private String deri;
     @JoinColumn(name = "DhomaID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private LlojiDhomes dhomaID;
+    private Dhoma dhomaID;
     @JoinColumn(name = "StafiID", referencedColumnName = "LoginID")
     @ManyToOne(optional = false)
     private LogIn stafiID;
@@ -71,7 +68,7 @@ public class Rezervimi implements Serializable {
         this.id = id;
     }
 
-    public Rezervimi(Integer id, String klienti, String telefonit, Date ngaData, String deri) {
+    public Rezervimi(Integer id, String klienti, String telefonit, Date ngaData, Date deri) {
         this.id = id;
         this.klienti = klienti;
         this.telefonit = telefonit;
@@ -111,19 +108,12 @@ public class Rezervimi implements Serializable {
         this.ngaData = ngaData;
     }
 
-    public String getDeri() {
-        return deri;
-    }
 
-    public void setDeri(String deri) {
-        this.deri = deri;
-    }
-
-    public LlojiDhomes getDhomaID() {
+    public Dhoma getDhomaID() {
         return dhomaID;
     }
 
-    public void setDhomaID(LlojiDhomes dhomaID) {
+    public void setDhomaID(Dhoma dhomaID) {
         this.dhomaID = dhomaID;
     }
 
@@ -159,12 +149,13 @@ public class Rezervimi implements Serializable {
     public String toString() {
         return "BLL.Rezervimi[ id=" + id + " ]";
     }
-        @XmlTransient
-      public Collection<Rezervimi> getRezervimiCollection() {
-        return rezervimiCollection;
+
+    public Date getDeri() {
+        return deri;
     }
 
-    public void setRezervimiCollection(Collection<Rezervimi> rezervimiCollection) {
-        this.rezervimiCollection = rezervimiCollection;
+    public void setDeri(Date deri) {
+        this.deri = deri;
     }
+    
 }

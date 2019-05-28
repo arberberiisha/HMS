@@ -6,6 +6,7 @@
 package DAL;
 
 import BLL.LogIn;
+
 import java.util.List;
 import javax.persistence.Query;
 
@@ -81,5 +82,9 @@ public class LogInRepository extends EntMngClass implements LoginInterface {
         } catch (Exception e) {
             throw new ProjectException("Msg! \n" + e.getMessage());
         }
+        
     }
+
+  
+    
 }

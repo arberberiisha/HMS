@@ -36,9 +36,10 @@ public class Kati implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "ID")
-    @GeneratedValue(generator = "InvSeq")
-    @SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize = 1)
+    @GeneratedValue(generator="InvSeq")
+    @SequenceGenerator(name="InvSeq",sequenceName="INV_SEQ", allocationSize=1)
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "Emertimi")
     private String emertimi;
     @OneToMany(mappedBy = "katiID")
@@ -49,6 +50,11 @@ public class Kati implements Serializable {
 
     public Kati(Integer id) {
         this.id = id;
+    }
+
+    public Kati(Integer id, String emertimi) {
+        this.id = id;
+        this.emertimi = emertimi;
     }
 
     public Integer getId() {

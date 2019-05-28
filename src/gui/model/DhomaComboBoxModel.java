@@ -44,4 +44,8 @@ public class DhomaComboBoxModel extends AbstractListModel<Dhoma> implements Comb
     public Object getSelectedItem() {
         return selectedItem;
     }
+
+    public void repaint() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

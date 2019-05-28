@@ -10,7 +10,8 @@
     <class>BLL.Kati</class>
     <class>BLL.LogIn</class>
     <class>BLL.Rezervimi</class>
-    <class>BLL.Sysdiagrams</class>
+    <class>BLL.Admin</class>
+    <class>BLL.Roli</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=HotelDB"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

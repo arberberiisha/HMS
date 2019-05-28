@@ -58,4 +58,5 @@ public class LlojiDhomesRepository extends EntMngClass implements LlojiDhomesInt
             throw new ProjectException("Msg! \n" + e.getMessage());
         }
     }
+   
 }

@@ -6,17 +6,16 @@
 package BLL;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,8 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "LogIn.findByUserName", query = "SELECT l FROM LogIn l WHERE l.userName = :userName"),
     @NamedQuery(name = "LogIn.findByPassword", query = "SELECT l FROM LogIn l WHERE l.password = :password")})
 public class LogIn implements Serializable {
-    @OneToMany(mappedBy = "klientiID1")
-    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -44,6 +41,9 @@ public class LogIn implements Serializable {
     @Basic(optional = false)
     @Column(name = "Password")
     private String password;
+    @JoinColumn(name = "IDRoli", referencedColumnName = "id")
+    @ManyToOne
+    private Roli iDRoli;
 
     public LogIn() {
     }
@@ -82,6 +82,14 @@ public class LogIn implements Serializable {
         this.password = password;
     }
 
+    public Roli getIDRoli() {
+        return iDRoli;
+    }
+
+    public void setIDRoli(Roli iDRoli) {
+        this.iDRoli = iDRoli;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -106,7 +114,5 @@ public class LogIn implements Serializable {
     public String toString() {
         return "BLL.LogIn[ loginID=" + loginID + " ]";
     }
-
- 
     
 }
