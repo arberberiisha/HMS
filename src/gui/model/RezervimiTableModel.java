@@ -6,6 +6,7 @@
 package gui.model;
 
 import BLL.Rezervimi;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -51,6 +52,7 @@ public class RezervimiTableModel extends AbstractTableModel {
 
     public Object getValueAt(int rowIndex, int columnIndex) {
         Rezervimi k = list.get(rowIndex);
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         switch (columnIndex) {
             case 0:
                 return k.getStafiID().getUserName();
@@ -65,9 +67,9 @@ public class RezervimiTableModel extends AbstractTableModel {
             case 5:
                 return k.getDhomaID().getLlojiDhomesID().getEmertimi();
             case 6:
-                return k.getNgaData().toInstant();
+                return dateformat.format(k.getNgaData());
             case 7:
-                return k.getDeri();
+                return dateformat.format(k.getDeri());
             default:
                 return null;
 

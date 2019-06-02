@@ -39,7 +39,7 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form MainForm
      */
-    private static LoginDialog ld = LoginDialog.getInstance();
+    public static LoginDialog ld = LoginDialog.getInstance();
     
     public MainForm() {
         
@@ -81,7 +81,6 @@ public class MainForm extends javax.swing.JFrame {
         name = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        openMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
         Kyquni = new javax.swing.JMenuItem();
@@ -89,7 +88,6 @@ public class MainForm extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -226,21 +224,16 @@ public class MainForm extends javax.swing.JFrame {
         fileMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/home.png"))); // NOI18N
         fileMenu.setMnemonic('f');
         fileMenu.setText("Home");
+        fileMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fileMenuMouseClicked(evt);
+            }
+        });
         fileMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fileMenuActionPerformed(evt);
             }
         });
-
-        openMenuItem.setMnemonic('o');
-        openMenuItem.setText("Open");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(openMenuItem);
-
         menuBar.add(fileMenu);
 
         editMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/report.png"))); // NOI18N
@@ -301,15 +294,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenu9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/switchUser.png"))); // NOI18N
         jMenu9.setText("Switch User");
-
-        jMenuItem2.setText("NdryshoPerdoruesin");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+        jMenu9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu9MouseClicked(evt);
             }
         });
-        jMenu9.add(jMenuItem2);
-
         menuBar.add(jMenu9);
 
         setJMenuBar(menuBar);
@@ -342,19 +331,9 @@ public class MainForm extends javax.swing.JFrame {
 
     private void fileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuActionPerformed
         // TODO add your handling code here:
+        
 
     }//GEN-LAST:event_fileMenuActionPerformed
-
-    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        // TODO add your handling code here:
-        jLayeredPane1.removeAll();
-        repaint();
-        
-        Home h = new Home();
-        jLayeredPane1.add(h);
-        h.show();
-
-    }//GEN-LAST:event_openMenuItemActionPerformed
     
     private void editMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuActionPerformed
 
@@ -425,9 +404,19 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nameAncestorAdded
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void fileMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileMenuMouseClicked
         // TODO add your handling code here:
-        dispose();
+        jLayeredPane1.removeAll();
+        repaint();
+        
+        Home h = new Home();
+        jLayeredPane1.add(h);
+        h.show();
+    }//GEN-LAST:event_fileMenuMouseClicked
+
+    private void jMenu9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu9MouseClicked
+        // TODO add your handling code here:
+         dispose();
                    ld.setVisible(true);
                 if (ld.sukses) {
             java.awt.EventQueue.invokeLater(new Runnable() {
@@ -440,7 +429,7 @@ public class MainForm extends javax.swing.JFrame {
             });
         }
             repaint();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_jMenu9MouseClicked
    
     /**
      * @param args the command line arguments
@@ -512,7 +501,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
     private java.awt.Menu menu1;
     private java.awt.Menu menu2;
@@ -520,7 +508,6 @@ public class MainForm extends javax.swing.JFrame {
     private java.awt.MenuBar menuBar1;
     private javax.swing.JLabel name;
     private javax.swing.JLabel name1;
-    private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JPanel passwordField;
     private java.awt.PopupMenu popupMenu1;
     // End of variables declaration//GEN-END:variables

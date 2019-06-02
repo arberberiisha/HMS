@@ -6,6 +6,8 @@
 package DAL;
 
 import BLL.Rezervimi;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Query;
 
@@ -66,5 +68,18 @@ public class RezervimiRepository extends EntMngClass implements RezervimiInterfa
         } catch (Exception e) {
             throw new ProjectException("Msg! \n" + e.getMessage());
         }
+    }
+    
+    
+    public Rezervimi test(Date data) throws ProjectException{
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        
+        try {
+            Query q = em.createNamedQuery("Rezervimi.findByNgaData");
+            q.setParameter("ngaData", data);
+            return (Rezervimi)q.getSingleResult();
+        } catch (Exception e) {
+            throw new ProjectException("Msg! \n" + e.getMessage());
+        }    
     }
 }

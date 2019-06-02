@@ -30,7 +30,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Dhoma.findAll", query = "SELECT d FROM Dhoma d"),
     @NamedQuery(name = "Dhoma.findById", query = "SELECT d FROM Dhoma d WHERE d.id = :id"),
     @NamedQuery(name = "Dhoma.findByEmertimi", query = "SELECT d FROM Dhoma d WHERE d.emertimi = :emertimi"),
-    @NamedQuery(name = "Dhoma.findByNrShtreterve", query = "SELECT d FROM Dhoma d WHERE d.nrShtreterve = :nrShtreterve")})
+    @NamedQuery(name = "Dhoma.findByNrShtreterve", query = "SELECT d FROM Dhoma d WHERE d.nrShtreterve = :nrShtreterve"),
+  //  @NamedQuery(name = "Dhoma.findByData", query = "Select d from Dhoma d as ro where ro.ID not in (select re.DhomaID from Rezervimi as re where (NgaData between '2023-01-01' and  '2025-01-01') or (Deri between '2023-01-01' and  '2025-01-01') )")
+    })
+    
+
 public class Dhoma implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -119,7 +123,7 @@ public class Dhoma implements Serializable {
 
     @Override
     public String toString() {
-        return "BLL.Dhoma[ id=" + id + " ]";
+        return emertimi;
     }
     
 }
