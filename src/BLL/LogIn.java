@@ -6,7 +6,9 @@
 package BLL;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,6 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "LogIn.findByUserName", query = "SELECT l FROM LogIn l WHERE l.userName = :userName"),
     @NamedQuery(name = "LogIn.findByPassword", query = "SELECT l FROM LogIn l WHERE l.password = :password")})
 public class LogIn implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stafiID")
+    private Collection<Rezervimi> rezervimiCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -113,6 +119,15 @@ public class LogIn implements Serializable {
     @Override
     public String toString() {
         return "BLL.LogIn[ loginID=" + loginID + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Rezervimi> getRezervimiCollection() {
+        return rezervimiCollection;
+    }
+
+    public void setRezervimiCollection(Collection<Rezervimi> rezervimiCollection) {
+        this.rezervimiCollection = rezervimiCollection;
     }
     
 }

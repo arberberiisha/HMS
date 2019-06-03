@@ -6,7 +6,9 @@
 package BLL;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +17,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,6 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     
 
 public class Dhoma implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dhomaID")
+    private Collection<Rezervimi> rezervimiCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -124,6 +130,15 @@ public class Dhoma implements Serializable {
     @Override
     public String toString() {
         return emertimi;
+    }
+
+    @XmlTransient
+    public Collection<Rezervimi> getRezervimiCollection() {
+        return rezervimiCollection;
+    }
+
+    public void setRezervimiCollection(Collection<Rezervimi> rezervimiCollection) {
+        this.rezervimiCollection = rezervimiCollection;
     }
     
 }

@@ -17,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
 public class RezervimiTableModel extends AbstractTableModel {
 
     List<Rezervimi> list;
-    String[] cols = {"Stafi", "ID", "Klienti","Telefoni","Dhoma","LlojiDhomes", "NgaData", "Deri"};
+    String[] cols = {"Stafi","ID","Klienti","Telefoni","Dhoma","LlojiDhomes","Cmimi", "NgaData", "Deri"};
 
     public RezervimiTableModel(List<Rezervimi> list) {
         this.list = list;
@@ -67,8 +67,10 @@ public class RezervimiTableModel extends AbstractTableModel {
             case 5:
                 return k.getDhomaID().getLlojiDhomesID().getEmertimi();
             case 6:
-                return dateformat.format(k.getNgaData());
+                return k.getCmimi()+" Euro";
             case 7:
+                return dateformat.format(k.getNgaData());
+            case 8:
                 return dateformat.format(k.getDeri());
             default:
                 return null;
