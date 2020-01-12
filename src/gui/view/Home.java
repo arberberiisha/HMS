@@ -7,11 +7,13 @@ package gui.view;
 
 import BLL.Dhoma;
 import BLL.Kati;
+import BLL.Klienti;
 import BLL.LlojiDhomes;
 import BLL.Rezervimi;
 import DAL.DhomaInterface;
 import DAL.DhomaRepository;
 import DAL.KatiRepository;
+import DAL.KlientiRepository;
 import DAL.LlojiDhomesRepository;
 import DAL.ProjectException;
 import DAL.RezervimiRepository;
@@ -19,6 +21,7 @@ import gui.model.DhomaComboBoxModel;
 import gui.model.DhomaTableModel;
 import gui.model.KatiComboBoxModel;
 import gui.model.KatiTableModel;
+import gui.model.KlientiComboBoxModel;
 import gui.model.LlojiDhomesComboBoxModel;
 import gui.model.LlojiDhomesTableModel;
 import gui.model.RezervimiTableModel;
@@ -35,13 +38,14 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
  * @author Arber
  */
 public class Home extends javax.swing.JInternalFrame {
-  
 
     DhomaInterface ASRepo = new DhomaRepository();
     DhomaRepository dr = new DhomaRepository();
@@ -59,35 +63,80 @@ public class Home extends javax.swing.JInternalFrame {
 
     RezervimiTableModel rtm = new RezervimiTableModel();
     RezervimiRepository rr = new RezervimiRepository();
-    
+
     List<Dhoma> telira;
-    
+
+    KlientiComboBoxModel kcbm = new KlientiComboBoxModel();
+    KlientiRepository klr = new KlientiRepository();
+
     String test = MainForm.ld.login.getUserName();
-        
-      
 
     /**
      * Creates new form Home
      */
-    public Home() {
+    public Home() {   
         initComponents();
         loadList();
         tabelaSelectedIndexChangeDhoma();
         tabelaSelectedIndexChangeLlojiDhomes();
         tabelaSelectedIndexChangeKati();
+        tabelaSelectedIndexChangeRezervimi();
         loadLlojiDhomesComboBox();
         loadKatiComboBox();
         setLabels();
         clearRezervimi();
-        
+
         stafi.setText(test);
         
-        
-        
-        
+        loadKlienti();
+
+        ObjectToStringConverter objtostring = new ObjectToStringConverter() {
+
+//            @Override
+//            public String[] getPossibleStringsForItem(Object item) {
+//                if (item != null) {
+//                    Klienti k = (Klienti) item;
+//                    String[] list = new String[]{k.getEmri(), k.getPersonalNumber() + ""};
+//                    return list;
+//                }
+//                return null;
+//            }
+
+            @Override
+            public String getPreferredStringForItem(Object o) {
+                if (o != null) {
+                    Klienti k = (Klienti) o;
+                    return k.toString();
+                }
+                return null;
+            }
             
+
+        };
+        AutoCompleteDecorator.decorate(klienticb, objtostring);
         
+//        int ii = dr.getNrRezervimeve(15);
         
+//        System.out.println(ii);
+        
+
+    }
+    
+    private List<Klienti> klienti;
+   
+    public void loadKlienti() {
+
+        try {
+           
+            klienti = klr.findAll();
+            KlientiComboBoxModel ldcb = new KlientiComboBoxModel(klienti);
+            klienticb.setModel(ldcb);
+            klienticb.repaint();
+                   
+        } catch (ProjectException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     private void tabelaSelectedIndexChangeKati() {
@@ -147,6 +196,26 @@ public class Home extends javax.swing.JInternalFrame {
                     idTxt.setText(p.getId().toString());
                     emertimiTxt1.setText(p.getEmertimi());
 
+                }
+            }
+        });
+    }
+        private void tabelaSelectedIndexChangeRezervimi() {
+        final ListSelectionModel rowSM = table.getSelectionModel();
+        rowSM.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent Ise) {
+                if (Ise.getValueIsAdjusting()) {
+                    return;
+                }
+                ListSelectionModel rowSM = (ListSelectionModel) Ise.getSource();
+                int selectedIndex = rowSM.getAnchorSelectionIndex();
+                if (selectedIndex > -1) {
+                    
+                    Rezervimi p = rtm.getRezervimi(selectedIndex);
+                    klienticb.setSelectedItem(p.getKlientiID());
+//                    ngaData.setDate(p.getNgaData());
+//                    deriData.setDate(p.getDeri());
+                    
                 }
             }
         });
@@ -257,14 +326,9 @@ public class Home extends javax.swing.JInternalFrame {
         jDesktopPane4 = new javax.swing.JDesktopPane();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        ngaData = new com.toedter.calendar.JDateChooser();
-        deriData = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        telefoniField = new javax.swing.JTextField();
-        klientiField = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         shtoRezervim = new javax.swing.JButton();
         shfaqTeLira = new javax.swing.JButton();
@@ -273,6 +337,10 @@ public class Home extends javax.swing.JInternalFrame {
         min = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        klienticb = new javax.swing.JComboBox();
+        jLabel12 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         teliraTable = new javax.swing.JTable();
@@ -297,7 +365,7 @@ public class Home extends javax.swing.JInternalFrame {
         });
 
         jPanel6.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Tabela e Dhomave", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 24))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Tabela e Dhomave", 2, 2, new java.awt.Font("Tahoma", 3, 24))); // NOI18N
 
         table2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         table2.setModel(new javax.swing.table.DefaultTableModel(
@@ -347,7 +415,7 @@ public class Home extends javax.swing.JInternalFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 924, Short.MAX_VALUE)
+            .addGap(0, 888, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,7 +450,7 @@ public class Home extends javax.swing.JInternalFrame {
         );
 
         jPanel8.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "SHTONI NJE DHOME", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "SHTONI NJE DHOME", 2, 2, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
         jPanel8.setForeground(new java.awt.Color(255, 255, 255));
 
         emertimiLbl.setText("Numri Dhomes:");
@@ -525,7 +593,7 @@ public class Home extends javax.swing.JInternalFrame {
         jTabbedPane2.addTab("tab4", jDesktopPane1);
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "TABELA E LLOJIT TE DHOMAVE", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "TABELA E LLOJIT TE DHOMAVE", 2, 2, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -553,7 +621,7 @@ public class Home extends javax.swing.JInternalFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(156, Short.MAX_VALUE)
+                .addContainerGap(120, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -569,11 +637,11 @@ public class Home extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
                 .addComponent(DeleteLlojiDhomes)
-                .addGap(0, 227, Short.MAX_VALUE))
+                .addGap(0, 224, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "SHTO LLOJIN E DHOMES", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "SHTO LLOJIN E DHOMES", 2, 2, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
         jPanel7.setForeground(new java.awt.Color(153, 153, 153));
 
         idLbl.setForeground(new java.awt.Color(255, 255, 255));
@@ -675,7 +743,7 @@ public class Home extends javax.swing.JInternalFrame {
         jTabbedPane2.addTab("tab4", jDesktopPane2);
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "TABELA E KATEVE", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "TABELA E KATEVE", 2, 2, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
 
         table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -713,7 +781,7 @@ public class Home extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(336, 336, 336)
                         .addComponent(deleteKati, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -722,11 +790,11 @@ public class Home extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deleteKati)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         jPanel9.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "SHTO KATE", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "SHTO KATE", 2, 2, new java.awt.Font("Tahoma", 3, 20))); // NOI18N
         jPanel9.setForeground(new java.awt.Color(51, 102, 255));
 
         idLbl1.setForeground(new java.awt.Color(255, 255, 255));
@@ -826,19 +894,13 @@ public class Home extends javax.swing.JInternalFrame {
 
         jTabbedPane2.addTab("tab4", jDesktopPane3);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "REZERVIMI", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
-
-        ngaData.setDateFormatString("yyyy-MM-dd");
-
-        deriData.setDateFormatString("yyyy-MM-dd");
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "REZERVIMI", 2, 0, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
 
         jLabel2.setText("NGA DATA:");
 
         jLabel3.setText("DERI ME DATEN:");
 
-        jLabel7.setText("EMRI I KLIENTIT:");
-
-        jLabel9.setText("NR.TELEFONI:");
+        jLabel7.setText("Nr Personal i Klientit:");
 
         jButton4.setText("Anulo");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -900,52 +962,71 @@ public class Home extends javax.swing.JInternalFrame {
 
         jLabel11.setText("Staf:");
 
+        jButton5.setText("+");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Shto Klient:");
+
+        jButton7.setText("Refresh");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stafi, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel2))
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(shtoRezervim)
-                                .addGap(68, 68, 68)
-                                .addComponent(jButton4))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(93, 93, 93)
-                                .addComponent(jLabel3)
-                                .addGap(95, 95, 95)
-                                .addComponent(jLabel10))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(shfaqTeLira)
-                                .addGap(129, 129, 129)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(add)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(min, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(cmimi, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(klientiField, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(telefoniField, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(ngaData, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deriData, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel11)
+                                .addComponent(jLabel2))
+                            .addGap(19, 19, 19)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGap(93, 93, 93)
+                                    .addComponent(jLabel3)
+                                    .addGap(95, 95, 95)
+                                    .addComponent(jLabel10))
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                            .addGap(11, 11, 11)
+                                            .addComponent(shfaqTeLira))
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                            .addGap(43, 43, 43)
+                                            .addComponent(shtoRezervim)
+                                            .addGap(42, 42, 42)
+                                            .addComponent(jButton4)))
+                                    .addGap(70, 70, 70)
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                            .addComponent(add)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(min, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(cmimi, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(klienticb, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel12)
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(34, 34, 34)
+                                    .addComponent(jButton7)))))
+                    .addComponent(stafi, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -953,43 +1034,37 @@ public class Home extends javax.swing.JInternalFrame {
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stafi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(klienticb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel9))
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(klientiField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(telefoniField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(deriData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ngaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(cmimi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(min)
-                            .addComponent(add)
-                            .addComponent(shfaqTeLira))
-                        .addContainerGap(105, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(shtoRezervim)
-                            .addComponent(jButton4))
-                        .addGap(23, 23, 23))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22))
+                    .addComponent(cmimi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(min)
+                    .addComponent(add)
+                    .addComponent(shfaqTeLira))
+                .addGap(51, 51, 51)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(shtoRezervim)
+                    .addComponent(jButton4))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TABELA E DHOMAVE TE LIRA", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TABELA E DHOMAVE TE LIRA", 2, 2, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
 
         teliraTable.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         teliraTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1033,7 +1108,7 @@ public class Home extends javax.swing.JInternalFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TABELA E REZERVIMEVE", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "TABELA E REZERVIMEVE", 2, 0, new java.awt.Font("Tw Cen MT", 1, 18))); // NOI18N
 
         tabelaRezervimeve.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1048,6 +1123,7 @@ public class Home extends javax.swing.JInternalFrame {
         ));
         jScrollPane4.setViewportView(tabelaRezervimeve);
 
+        jButton6.setForeground(new java.awt.Color(255, 51, 51));
         jButton6.setText("Fshij rreshtin e selektuar");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1060,16 +1136,16 @@ public class Home extends javax.swing.JInternalFrame {
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(538, Short.MAX_VALUE)
+                .addContainerGap(536, Short.MAX_VALUE)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(509, 509, 509))
+                .addGap(511, 511, 511))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
                 .addComponent(jButton6)
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -1117,9 +1193,7 @@ public class Home extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1135,7 +1209,7 @@ public class Home extends javax.swing.JInternalFrame {
         );
         jDesktopPane4Layout.setVerticalGroup(
             jDesktopPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 758, Short.MAX_VALUE)
         );
         jDesktopPane4.setLayer(jPanel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -1145,11 +1219,14 @@ public class Home extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1261, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1225, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
 
         pack();
@@ -1183,7 +1260,7 @@ public class Home extends javax.swing.JInternalFrame {
         } catch (ProjectException ex) {
             JOptionPane.showMessageDialog(this, "Mesazhi:" + ex.getMessage());
         }
-        
+
         loadKatiComboBox();
     }//GEN-LAST:event_SaveNrKateveActionPerformed
 
@@ -1234,9 +1311,9 @@ public class Home extends javax.swing.JInternalFrame {
         } catch (ProjectException ex) {
             JOptionPane.showMessageDialog(this, "Mesazhi:" + ex.getMessage());
         }
-        
+
         loadLlojiDhomesComboBox();
-       
+
     }//GEN-LAST:event_SaveLlojiDhomesActionPerformed
 
     private void emertimiTxt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emertimiTxt1ActionPerformed
@@ -1387,13 +1464,13 @@ public class Home extends javax.swing.JInternalFrame {
 
     private void cmimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmimiActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_cmimiActionPerformed
 
     private DhomaTableModel teliramodel;
     private void shfaqTeLiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shfaqTeLiraActionPerformed
         // TODO add your handling code here:
-        telira = dr.findtelira(ngaData.getDate(), deriData.getDate());
+//        telira = dr.findtelira(ngaData.getDate(), deriData.getDate());
         teliramodel = new DhomaTableModel(telira);
 
         teliraTable.setModel(teliramodel);
@@ -1401,74 +1478,72 @@ public class Home extends javax.swing.JInternalFrame {
         teliramodel.fireTableStructureChanged();
         teliramodel.fireTableDataChanged();
 
-        
+
     }//GEN-LAST:event_shfaqTeLiraActionPerformed
-         
+
     private void shtoRezervimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shtoRezervimActionPerformed
-       
-        try{
-       
-             int row = tabelaRezervimeve.getSelectedRow();
-             int row1 = teliraTable.getSelectedRow();
-       
-             Dhoma d =  teliramodel.getDhoma(row1);
-       
-             String test = MainForm.ld.login.getUserName();
-      
-            if(row == -1)
-        {
-            Rezervimi r = new Rezervimi();
-            
-           
-            r.setKlienti(klientiField.getText());     
-            r.setTelefonit(telefoniField.getText());
-            r.setCmimi(Integer.parseInt(cmimi.getText()));
-            r.setDhomaID(d);
-            r.setNgaData(ngaData.getDate());
-            r.setDeri(deriData.getDate());
-            r.setStafiID(MainForm.ld.login);
-            
-            rr.create(r);
-            shfaqTeLiraActionPerformed(evt);
-            
-        }else{
-            
-                Rezervimi r = rtm.getRezervimi(row);
-                
-                r.setKlienti(klientiField.getText());
-                r.setTelefonit(telefoniField.getText());
+
+        try {
+
+            int row = tabelaRezervimeve.getSelectedRow();
+            int row1 = teliraTable.getSelectedRow();
+
+            Dhoma d = teliramodel.getDhoma(row1);
+
+            String test = MainForm.ld.login.getUserName();
+
+            if (row == -1) {
+                Rezervimi r = new Rezervimi();
+                Klienti k = new Klienti();
+
+//            r.setKlienti(klientiField.getText());     
+//            r.setTelefonit(telefoniField.getText());
+                k = kcbm.getElementAt(klienticb.getSelectedIndex());
+                r.setKlientiID(k);
                 r.setCmimi(Integer.parseInt(cmimi.getText()));
                 r.setDhomaID(d);
-                r.setNgaData(ngaData.getDate());
-                r.setDeri(deriData.getDate());
-                            r.setStafiID(MainForm.ld.login);
+//                r.setNgaData(ngaData.getDate());
+//                r.setDeri(deriData.getDate());
+                r.setStafiID(MainForm.ld.login);
 
-                
+                rr.create(r);
+                shfaqTeLiraActionPerformed(evt);
+
+            } else {
+
+                Rezervimi r = rtm.getRezervimi(row);
+                                Klienti k = new Klienti();
+
+                k = kcbm.getElementAt(klienticb.getSelectedIndex());
+
+//                r.setKlienti(klientiField.getText());
+//                r.setTelefonit(telefoniField.getText());
+                r.setCmimi(Integer.parseInt(cmimi.getText()));
+                r.setDhomaID(d);
+//                r.setNgaData(ngaData.getDate());
+//                r.setDeri(deriData.getDate());
+                r.setStafiID(MainForm.ld.login);
+
                 rr.edit(r);
             }
             clear();
             loadList();
-           
-        
-       
-        
-        
-        } catch (ProjectException ex)
-        {
+
+        } catch (ProjectException ex) {
             JOptionPane.showMessageDialog(this, "Ju lutem mbushni te gjitha kutit!");
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "Ju lutem mbushni te gjitha kutit!");
         }
-        
-       
+
+
     }//GEN-LAST:event_shtoRezervimActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        
+
         int c = 0;
-        if(!cmimi.getText().isEmpty()){
+        if (!cmimi.getText().isEmpty()) {
             c = Integer.parseInt(cmimi.getText());
-        }        
+        }
         cmimi.setText(c + 5 + "");
     }//GEN-LAST:event_addActionPerformed
 
@@ -1479,13 +1554,13 @@ public class Home extends javax.swing.JInternalFrame {
     private void minActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minActionPerformed
         // TODO add your handling code here:
         int c = 0;
-        if(!cmimi.getText().equals("0") && !cmimi.getText().isEmpty()){
-        if(!cmimi.getText().isEmpty()){
-            c = Integer.parseInt(cmimi.getText());
-        }        
-        cmimi.setText(c - 5 + "");
-        }else{
-            
+        if (!cmimi.getText().equals("0") && !cmimi.getText().isEmpty()) {
+            if (!cmimi.getText().isEmpty()) {
+                c = Integer.parseInt(cmimi.getText());
+            }
+            cmimi.setText(c - 5 + "");
+        } else {
+
         }
     }//GEN-LAST:event_minActionPerformed
 
@@ -1493,7 +1568,23 @@ public class Home extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         clearRezervimi();
     }//GEN-LAST:event_jButton4ActionPerformed
+    KlientiRepository krepo = new KlientiRepository();
+    Klienti k = null;
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        
+            MainForm.kd.setVisible(true);
+            MainForm.kd.setModal(true);
+      
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        repaint();
+        loadKlienti();
+        clear();
    
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     private List<Kati> kati;
 
     public void loadKatiComboBox() {
@@ -1575,6 +1666,8 @@ public class Home extends javax.swing.JInternalFrame {
         } catch (ProjectException ex) {
             Logger.getLogger(LlojiDhomesForm.class.getName()).log(Level.SEVERE, null, ex);
         }
+   
+        
     }
 
     public void clear() {
@@ -1594,15 +1687,15 @@ public class Home extends javax.swing.JInternalFrame {
         idTxt1.setText("");
 
     }
-    public void clearRezervimi(){
-        klientiField.setText("");
-        telefoniField.setText("");
+
+    public void clearRezervimi() {
+//        klientiField.setText("");
+       // telefoniField.setText("");
         cmimi.setText(null);
-        ngaData.setDate(null);
-        deriData.setDate(null);
+//        ngaData.setDate(null);
+//        deriData.setDate(null);
         teliraTable.clearSelection();
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DeleteLlojiDhomes;
@@ -1621,7 +1714,6 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JTextField cmimi;
     private javax.swing.JButton deleteDhoma;
     private javax.swing.JButton deleteKati;
-    private com.toedter.calendar.JDateChooser deriData;
     private javax.swing.JLabel emertimiLbl;
     private javax.swing.JLabel emertimiLbl1;
     private javax.swing.JLabel emertimiLbl2;
@@ -1637,7 +1729,9 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JDesktopPane jDesktopPane3;
@@ -1645,6 +1739,7 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1652,7 +1747,6 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1672,9 +1766,8 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextField klientiField;
+    private javax.swing.JComboBox klienticb;
     private javax.swing.JButton min;
-    private com.toedter.calendar.JDateChooser ngaData;
     private javax.swing.JButton shfaqTeLira;
     private javax.swing.JButton shtoRezervim;
     private final javax.swing.JTextField stafi = new javax.swing.JTextField();
@@ -1682,7 +1775,6 @@ public class Home extends javax.swing.JInternalFrame {
     private javax.swing.JTable table;
     private javax.swing.JTable table1;
     private javax.swing.JTable table2;
-    private javax.swing.JTextField telefoniField;
     private javax.swing.JTable teliraTable;
     // End of variables declaration//GEN-END:variables
 

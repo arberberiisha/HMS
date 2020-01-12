@@ -5,32 +5,26 @@
  */
 package gui.view;
 
-import BLL.LogIn;
+import BLL.Klienti;
 import BLL.Roli;
-import DAL.LogInRepository;
+import DAL.KlientiRepository;
 import DAL.ProjectException;
 import DAL.RoliRepository;
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Window;
+import gui.model.KlientiComboBoxModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
+import javax.swing.ComboBoxEditor;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import org.jdesktop.swingx.autocomplete.AutoCompleteComboBoxEditor;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
@@ -39,42 +33,51 @@ import javax.swing.Timer;
 public class MainForm extends javax.swing.JFrame {
 
     private Object jTabbedPane1;
-    
+
     RoliRepository rr = new RoliRepository();
 
     /**
      * Creates new form MainForm
      */
     public static LoginDialog ld = LoginDialog.getInstance();
-    
+
+    public static KlientiDialog kd = KlientiDialog.getInstance();
+
+    KlientiComboBoxModel kcbm = new KlientiComboBoxModel();
+    KlientiRepository kr = new KlientiRepository();
+
     public MainForm() {
-        
+
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         name.setText(ld.login.getUserName());
         showDate();
         showTime();
+
     }
-    
-    void showDate(){
+
+
+
+    void showDate() {
         Date d = new Date();
         SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
         data.setText(s.format(d));
     }
-    void showTime(){
-        new Timer(0, new ActionListener(){
+
+    void showTime() {
+        new Timer(0, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                 Date d = new Date();
-        SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss a");
-        ora.setText(s.format(d));
+                Date d = new Date();
+                SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss a");
+                ora.setText(s.format(d));
             }
         }
         ).start();
-            
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,7 +100,6 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu6 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
         jLabel1 = new javax.swing.JLabel();
         passwordField = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -107,6 +109,7 @@ public class MainForm extends javax.swing.JFrame {
         name = new javax.swing.JLabel();
         data = new javax.swing.JLabel();
         ora = new javax.swing.JLabel();
+        jLayeredPane = new javax.swing.JLayeredPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -146,20 +149,6 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jLayeredPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
-        jLayeredPane1.setForeground(new java.awt.Color(153, 153, 153));
-
-        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
-        jLayeredPane1.setLayout(jLayeredPane1Layout);
-        jLayeredPane1Layout.setHorizontalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1257, Short.MAX_VALUE)
-        );
-        jLayeredPane1Layout.setVerticalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         jLabel1.setText("jLabel1");
 
         passwordField.setBackground(new java.awt.Color(153, 153, 153));
@@ -170,11 +159,11 @@ public class MainForm extends javax.swing.JFrame {
         passwordField.setLayout(passwordFieldLayout);
         passwordFieldLayout.setHorizontalGroup(
             passwordFieldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 272, Short.MAX_VALUE)
         );
         passwordFieldLayout.setVerticalGroup(
             passwordFieldLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 465, Short.MAX_VALUE)
+            .addGap(0, 447, Short.MAX_VALUE)
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
@@ -261,6 +250,17 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(361, 361, 361)
                 .addComponent(jLabel4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jLayeredPaneLayout = new javax.swing.GroupLayout(jLayeredPane);
+        jLayeredPane.setLayout(jLayeredPaneLayout);
+        jLayeredPaneLayout.setHorizontalGroup(
+            jLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1086, Short.MAX_VALUE)
+        );
+        jLayeredPaneLayout.setVerticalGroup(
+            jLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         menuBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 0, 0), new java.awt.Color(102, 102, 102)));
@@ -357,19 +357,20 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 332, Short.MAX_VALUE)
-                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jLayeredPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLayeredPane)
         );
 
         pack();
@@ -377,26 +378,25 @@ public class MainForm extends javax.swing.JFrame {
 
     private void fileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_fileMenuActionPerformed
-    
+
     private void editMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuActionPerformed
-        
-        
+
        // TODO add your handling code here:
 
     }//GEN-LAST:event_editMenuActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-     
-            About dialog = new About(new javax.swing.JFrame(), true);
-            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                 
-                }
-            });
-            dialog.setVisible(true);
+
+        About dialog = new About(new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void jMenu8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu8ActionPerformed
@@ -412,34 +412,40 @@ public class MainForm extends javax.swing.JFrame {
     private void KyquniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KyquniActionPerformed
         // TODO add your handling code here:
         //hek gjithqka ne kryefaqe
-       passwordField.removeAll();
+        passwordField.removeAll();
         repaint();
-        
+
         Roli admin = null;
         try {
             admin = rr.findByID(1);
         } catch (ProjectException ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-            if(ld.login.getIDRoli().equals(admin))
-        {
-        StafiForm h = new StafiForm();
-        passwordField.add(h);
-        h.show();
-        }else{
-             JOptionPane.showMessageDialog(null, "Ju smund te keni qasje ketu.");
+        if (ld.login.getIDRoli().equals(admin)) {
+            StafiForm h = new StafiForm();
+            passwordField.add(h);
+            h.show();
+        } else {
+            JOptionPane.showMessageDialog(null, "Ju smund te keni qasje ketu.");
         }
     }//GEN-LAST:event_KyquniActionPerformed
+
+    public void openDialog() {
+
+        KlientiDialog kd = new KlientiDialog(this, true);
+
+    }
+
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         passwordField.removeAll();
         repaint();
-        
-       NdrrimiIPaswordit h = new NdrrimiIPaswordit();
+
+        NdrrimiIPaswordit h = new NdrrimiIPaswordit();
         passwordField.add(h);
         h.show();
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void name1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_name1AncestorAdded
@@ -452,19 +458,19 @@ public class MainForm extends javax.swing.JFrame {
 
     private void fileMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileMenuMouseClicked
         // TODO add your handling code here:
-        jLayeredPane1.removeAll();
+        jLayeredPane.removeAll();
         repaint();
-        
+
         Home h = new Home();
-        jLayeredPane1.add(h);
+        jLayeredPane.add(h);
         h.show();
     }//GEN-LAST:event_fileMenuMouseClicked
 
     private void jMenu9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu9MouseClicked
         // TODO add your handling code here:
-         dispose();
-                   ld.setVisible(true);
-                if (ld.sukses) {
+        dispose();
+        ld.setVisible(true);
+        if (ld.sukses) {
             java.awt.EventQueue.invokeLater(new Runnable() {
 
                 public void run() {
@@ -474,19 +480,19 @@ public class MainForm extends javax.swing.JFrame {
                 }
             });
         }
-            repaint();
+        repaint();
     }//GEN-LAST:event_jMenu9MouseClicked
 
     private void editMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMenuMouseClicked
         // TODO add your handling code here:
-        jLayeredPane1.removeAll();
+        jLayeredPane.removeAll();
         repaint();
-        
+
         Statistic s = new Statistic();
-        jLayeredPane1.add(s);
+        jLayeredPane.add(s);
         s.show();
     }//GEN-LAST:event_editMenuMouseClicked
-   
+
     /**
      * @param args the command line arguments
      */
@@ -526,11 +532,9 @@ public class MainForm extends javax.swing.JFrame {
 
                 }
             });
-        }
-        else{
+        } else {
             System.exit(0);
         }
-       
 
     }
 
@@ -545,7 +549,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JLayeredPane jLayeredPane;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

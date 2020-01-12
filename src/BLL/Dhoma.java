@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import DAL.DhomaRepository;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -139,6 +140,16 @@ public class Dhoma implements Serializable {
 
     public void setRezervimiCollection(Collection<Rezervimi> rezervimiCollection) {
         this.rezervimiCollection = rezervimiCollection;
+    }
+    
+    public int getNrRezervimeve(){
+        DhomaRepository dr = new DhomaRepository();
+        
+      
+        
+        
+        
+        return 0;
     }
     
 }

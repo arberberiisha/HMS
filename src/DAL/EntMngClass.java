@@ -13,5 +13,5 @@ import javax.persistence.Persistence;
  * @author Arber
  */
 public abstract class EntMngClass {
-     EntityManager em= Persistence.createEntityManagerFactory("Hotel").createEntityManager();
+     EntityManager em= Persistence.createEntityManagerFactory("HotelMGPU").createEntityManager();
 }

@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Arber/Documents/NetBeansProjects/HotelMG/src/gui/view/Home.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/gui/view/Home.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/gui/model/RezervimiComboBoxModel.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/gui/model/RezervimiTableModel.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/DAL/RezervimiRepository.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/DAL/EntMngClass.java</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/META-INF/persistence.xml</file>
+            <file>file:/C:/Users/Arber/Desktop/HotelMG/src/gui/view/KlientiDialog.java</file>
         </group>
     </open-files>
 </project-private>

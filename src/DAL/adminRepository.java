@@ -6,7 +6,7 @@
 package DAL;
 
 import BLL.Admin;
-import static BLL.Admin_.name;
+
 import java.util.List;
 import javax.persistence.Query;
 

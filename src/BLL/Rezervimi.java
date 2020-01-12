@@ -32,25 +32,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Rezervimi.findAll", query = "SELECT r FROM Rezervimi r"),
     @NamedQuery(name = "Rezervimi.findById", query = "SELECT r FROM Rezervimi r WHERE r.id = :id"),
-    @NamedQuery(name = "Rezervimi.findByKlienti", query = "SELECT r FROM Rezervimi r WHERE r.klienti = :klienti"),
-    @NamedQuery(name = "Rezervimi.findByTelefonit", query = "SELECT r FROM Rezervimi r WHERE r.telefonit = :telefonit"),
     @NamedQuery(name = "Rezervimi.findByCmimi", query = "SELECT r FROM Rezervimi r WHERE r.cmimi = :cmimi"),
     @NamedQuery(name = "Rezervimi.findByNgaData", query = "SELECT r FROM Rezervimi r WHERE r.ngaData = :ngaData"),
-    @NamedQuery(name = "Rezervimi.findByDeri", query = "SELECT r FROM Rezervimi r WHERE r.deri = :deri")})
+    @NamedQuery(name = "Rezervimi.findByDeri", query = "SELECT r FROM Rezervimi r WHERE r.deri = :deri"),
+    @NamedQuery(name = "Rezervimi.findByDataRegjistrimit", query = "SELECT r FROM Rezervimi r WHERE r.dataRegjistrimit = :dataRegjistrimit")})
 public class Rezervimi implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "ID")
-    @GeneratedValue(generator="InvSeq")
+     @GeneratedValue(generator="InvSeq")
     @SequenceGenerator(name="InvSeq",sequenceName="INV_SEQ", allocationSize=1)
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "Klienti")
-    private String klienti;
-    @Basic(optional = false)
-    @Column(name = "Telefonit")
-    private String telefonit;
     @Basic(optional = false)
     @Column(name = "Cmimi")
     private int cmimi;
@@ -62,11 +55,17 @@ public class Rezervimi implements Serializable {
     @Column(name = "Deri")
     @Temporal(TemporalType.DATE)
     private Date deri;
+    @Column(name = "DataRegjistrimit")
+    @Temporal(TemporalType.DATE)
+    private Date dataRegjistrimit;
     @JoinColumn(name = "DhomaID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Dhoma dhomaID;
-    @JoinColumn(name = "StafiID", referencedColumnName = "LoginID")
+    @JoinColumn(name = "KlientiID", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    private Klienti klientiID;
+    @JoinColumn(name = "StafiID", referencedColumnName = "LoginID")
+    @ManyToOne
     private LogIn stafiID;
 
     public Rezervimi() {
@@ -76,10 +75,8 @@ public class Rezervimi implements Serializable {
         this.id = id;
     }
 
-    public Rezervimi(Integer id, String klienti, String telefonit, int cmimi, Date ngaData, Date deri) {
+    public Rezervimi(Integer id, int cmimi, Date ngaData, Date deri) {
         this.id = id;
-        this.klienti = klienti;
-        this.telefonit = telefonit;
         this.cmimi = cmimi;
         this.ngaData = ngaData;
         this.deri = deri;
@@ -91,22 +88,6 @@ public class Rezervimi implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getKlienti() {
-        return klienti;
-    }
-
-    public void setKlienti(String klienti) {
-        this.klienti = klienti;
-    }
-
-    public String getTelefonit() {
-        return telefonit;
-    }
-
-    public void setTelefonit(String telefonit) {
-        this.telefonit = telefonit;
     }
 
     public int getCmimi() {
@@ -133,12 +114,28 @@ public class Rezervimi implements Serializable {
         this.deri = deri;
     }
 
+    public Date getDataRegjistrimit() {
+        return dataRegjistrimit;
+    }
+
+    public void setDataRegjistrimit(Date dataRegjistrimit) {
+        this.dataRegjistrimit = dataRegjistrimit;
+    }
+
     public Dhoma getDhomaID() {
         return dhomaID;
     }
 
     public void setDhomaID(Dhoma dhomaID) {
         this.dhomaID = dhomaID;
+    }
+
+    public Klienti getKlientiID() {
+        return klientiID;
+    }
+
+    public void setKlientiID(Klienti klientiID) {
+        this.klientiID = klientiID;
     }
 
     public LogIn getStafiID() {

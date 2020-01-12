@@ -6,7 +6,8 @@
 package DAL;
 
 import BLL.Dhoma;
-import gui.view.calendar;
+import BLL.result;
+
 import java.sql.PreparedStatement;
 import java.text.DateFormat;
 import java.text.FieldPosition;
@@ -18,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
@@ -162,4 +165,18 @@ public class DhomaRepository extends EntMngClass implements DhomaInterface {
         return q.getResultList();
     
     }
+    
+    
+    public int getNrRezervimeve(int DhomaID){
+        
+        try{
+            int nr = (int) ((Number)em.createNativeQuery("select count(DhomaID) as nr from Rezervimi\n" +
+            "where DhomaID = ?dhoma\n" +
+            "group by DhomaID").setParameter("dhoma", DhomaID).getSingleResult()).intValue();
+            return nr;
+        }catch(Exception e){
+            return 0;            
+        }      
+    }
+    
 }
